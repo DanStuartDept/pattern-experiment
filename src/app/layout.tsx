@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Magnetic filings",
-  description: "A WebGPU generative shader that reacts to the cursor.",
+  title: {
+    default: "Shader experiments",
+    template: "%s - Shader experiments",
+  },
+  description: "A library of WebGPU shader experiments built from Figma frames.",
   robots: {
     index: false,
     follow: false,
