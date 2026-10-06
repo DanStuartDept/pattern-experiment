@@ -13,6 +13,9 @@ export default function Home() {
         WebGPU shaders built from Figma frames. Each one runs live in the
         browser and reacts to the cursor.
       </p>
+      <p className={styles.processLink}>
+        <Link href="/process">How these experiments are made</Link>
+      </p>
       <ul className={styles.grid}>
         {experiments.map((experiment) => (
           <li key={experiment.slug} className={styles.card}>

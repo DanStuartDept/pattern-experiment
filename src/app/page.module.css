@@ -19,6 +19,27 @@
   line-height: 1.5;
 }
 
+.processLink {
+  margin-top: 0.75rem;
+}
+
+.processLink a {
+  display: inline-block;
+  padding: 0.5rem 0;
+  color: #8ab4ff;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.processLink a:visited {
+  color: #c4a7ff;
+}
+
+.processLink a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
