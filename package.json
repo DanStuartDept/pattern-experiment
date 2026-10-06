@@ -1,10 +1,10 @@
 {
-  "name": "playground",
+  "name": "pattern-experiment",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },
@@ -17,6 +17,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@webgpu/types": "^0.1.74",
     "eslint": "^9",
     "eslint-config-next": "16.3.8",
     "typescript": "^5"

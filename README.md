@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pattern experiment
 
-## Getting Started
+A full-viewport WebGPU shader ("Magnetic filings") built from the Figma frame
+[Landing Page, node 341:414](https://www.figma.com/design/XPKuHSijbsTmvnbhDxNb50/Landing-Page?node-id=341-414&m=dev).
+A grid of white lines rotates and opens into ellipses as a wave crosses the screen. The cursor pulls nearby lines toward it.
 
-First, run the development server:
+The site is a static Next.js export, deployed to GitHub Pages. It is set to `noindex` and `robots.txt` disallows everything.
+
+## Requirements
+
+- A browser with WebGPU (current Chrome, Edge, or Safari). Without it the page shows a short text message instead of the shader.
+- With `prefers-reduced-motion: reduce`, the wave and the cursor effect are switched off and the shader draws a still frame.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # static export to ./out
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`dev` and `build` run on webpack (`--webpack`). The shader runtime imports its own files as `./x.js`, and Turbopack in this Next.js version doesn't map those to `.ts` and `.tsx`. `next.config.ts` adds a webpack `extensionAlias` so the runtime files stay untouched.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`.github/workflows/deploy.yml` builds the export and publishes it with GitHub Actions.
+In the repo settings, set Pages > Source to "GitHub Actions". The workflow passes the Pages base path to the build through `NEXT_PUBLIC_BASE_PATH`.
 
-## Learn More
+## How it was built
 
-To learn more about Next.js, take a look at the following resources:
+An agent built this from the Figma URL, using the Figma MCP server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Design context.** The `figma-design-to-code` skill loads first, then `get_design_context` runs on node 341:414 and returns a screenshot, the `ShaderFill` usage with its exact params, and the WGSL shader source.
+2. **Runtime.** The response says the shader needs Figma's runtime. The agent read the `shader-runtime-index` MCP resource and copied each listed file with the `shader-runtime` resource URIs into `src/lib/custom-effect-runtime/`, unchanged. The shader source went into `src/lib/custom-effects/`. Neither folder is hand-edited or linted.
+3. **Accessibility review.** An accessibility-lead agent reviewed the planned page before it was written. The page applies its advice: the shader sits in an `aria-hidden` wrapper, a visually hidden `<h1>` names the page, and a `role="status"` message covers missing WebGPU.
+4. **Page.** `src/app/page.tsx` is a client component, because the shader needs WebGPU and pointer events. Params are copied from the design context. The only overrides are under reduced motion.
+5. **Verification.** The dev server ran in Chrome with WebGPU. A frame captured shortly after load matches the design screenshot, and moving the pointer opens the filings around it.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The pause button the accessibility review recommended (WCAG 2.2.2) is not built yet.
