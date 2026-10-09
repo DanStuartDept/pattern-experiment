@@ -44,7 +44,7 @@ Never use the Figma screenshot as an asset. It is only the visual target.
 - `rotate` is a presentation choice, not a param. The exported code for a rectangle drops the node's own rotation, so compare the render with the Figma screenshot: if the shader looks turned 90 degrees, set `rotate`. The same shader can be rotated on one slide and not on another, so the component takes `rotate` per use. Never use it on a shader that reads the pointer.
 - Everything in `src/shaders/` must work in someone else's Next.js app: relative imports only, `"use client"` on any file that uses hooks or receives functions as props, and no `next/*` imports. `DEVELOPERS.md` is the contract for the team that copies it, so update it when props or setup change.
 - No CSS or canvas approximation of a shader. If the runtime can't render it, report that.
-- No Tailwind. Use CSS modules.
+- Styling: the `/examples` page uses Tailwind utilities. Other pages and everything in `src/shaders/` use CSS modules, so the shaders folder copies into an app that has no Tailwind. Tailwind is imported without Preflight (`theme.css` and `utilities.css` only), so don't add Preflight: it would change the existing pages. The global resets in `globals.css` sit in `@layer base` on purpose, because unlayered CSS beats every layer and would override utilities like `p-4`. Keep it that way.
 - `ShaderFill` needs WebGPU. `ShaderEffect` with children also needs the HTML-in-Canvas API, so warn the user if an experiment uses it.
 - Check each experiment for flashing above three times per second (WCAG 2.3.1). Fast, high-contrast shaders can fail this.
 - Every page stays `noindex`, and `robots.txt` stays `Disallow: /`. Don't remove either.
