@@ -16,6 +16,8 @@ Each experiment is a preset in `src/shaders/presets/`, a named component in `src
 
 Copy `src/shaders/` into the app and use the components, for example `<MorphingGradientGrow />`. The setup steps, props, accessibility notes and layout examples are in [DEVELOPERS.md](DEVELOPERS.md). The `/examples` page shows a 50/50 panel, a hero and a tile row with code to copy.
 
+If a coding agent is doing the install, point it at [AGENTS.md](AGENTS.md). It has the same setup as ordered steps, with checks and the points where it should stop and ask.
+
 ## Requirements
 
 - A browser with WebGPU (current Chrome, Edge, or Safari). Without it the page shows a short text message instead of the shader.

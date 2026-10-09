@@ -1,6 +1,6 @@
 # Using the shaders in a site
 
-`src/shaders/` is a self-contained folder of WebGPU shader components built from Figma frames. Copy it into a Next.js (App Router) app and drop a component into a layout. The `/examples` page in this repo shows a 50/50 panel, a hero and a tile row with the code for each.
+`src/shaders/` is a self-contained folder of WebGPU shader components built from Figma frames. Copy it into a Next.js (App Router) app and drop a component into a layout. The `/examples` page in this repo shows a 50/50 panel, a hero and a tile row with the code for each. If a coding agent is doing the install, point it at [AGENTS.md](AGENTS.md): it has the same setup as ordered steps with checks.
 
 ```tsx
 import { MorphingGradientGrow } from "@/shaders";
@@ -25,11 +25,11 @@ Each component already has the exact params from Figma, so it matches the design
 ## Quick start
 
 1. **Copy the folder.** Copy `src/shaders/` into your app's `src/`. Take the whole folder: the components import `runtime/`, `effects/` and `presets/` with relative paths.
-2. **Add the WebGPU types.** The runtime uses `GPUDevice` and friends.
+2. **Install the WebGPU types.** The runtime uses `GPUDevice` and friends.
    ```bash
    npm i -D @webgpu/types
    ```
-   In `tsconfig.json`, add `"types": ["@webgpu/types"]` under `compilerOptions` (keep any types you already list).
+   `src/shaders/webgpu.d.ts` pulls them in, so `tsconfig.json` needs no change. It only has to include that file (the create-next-app default `**/*.ts` does).
 3. **Teach webpack about `.js` imports.** The runtime imports its own files as `./x.js` and the real files are `.ts` and `.tsx`. In `next.config.ts`:
    ```ts
    const nextConfig: NextConfig = {
@@ -127,7 +127,7 @@ The steps live in `.claude/skills/shader-experiments/SKILL.md` and run well from
 ## Troubleshooting
 
 - **`Module not found: Can't resolve './components/ShaderEffect.js'`** (or another `./x.js`). The `extensionAlias` in step 3 is missing, or the app is running on Turbopack. Use `--webpack`. Next 16 uses Turbopack by default, so a fresh `create-next-app` hits this until you change the scripts. Turbopack's `resolveExtensions` option doesn't fix it.
-- **`Cannot find name 'GPUTexture'`** (or another `GPU...` type). Step 2: install `@webgpu/types` and list it under `types` in `tsconfig.json`.
+- **`Cannot find name 'GPUTexture'`** (or another `GPU...` type). Step 2: install `@webgpu/types`, and check `tsconfig.json` `include` covers `src/shaders/webgpu.d.ts`.
 - **`You're importing a module that depends on useSyncExternalStore into a React Server Component module`.** A file lost its `"use client"` line.
 - **Nothing shows, no errors.** The parent has no height (see Sizing), or the browser has no WebGPU.
 - **The shader looks turned 90 degrees against Figma.** Set `rotate`.
