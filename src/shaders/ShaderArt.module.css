@@ -1,0 +1,33 @@
+/* Fills its parent, so the parent needs a definite width and height.
+   container-type lets the rotated square size itself against this box in cqw/cqh. */
+/* Outer wrapper: the consumer's className and style land here, so it can be made absolute,
+   resized, etc. It only sets a default size, no position. */
+.outer {
+  width: 100%;
+  height: 100%;
+}
+
+/* Inner box owns the positioning context and the container the rotated square sizes against
+   (cqw/cqh). Fills the wrapper, so the wrapper needs a definite width and height. */
+.root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  container-type: size;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+}
+
+/* A square that covers the box, rotated about its centre. The rotation is applied inline. */
+.rotated {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100cqw, 100cqh);
+  height: max(100cqw, 100cqh);
+  pointer-events: none;
+}

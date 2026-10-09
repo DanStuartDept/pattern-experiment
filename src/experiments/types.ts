@@ -1,6 +1,7 @@
-import type { Shader } from "../lib/custom-effect-runtime/types";
+import type { ShaderPreset } from "../shaders/types";
 
-export type Experiment = {
+/** A listing entry: the shader preset plus the metadata the site needs to show it. */
+export type Experiment = ShaderPreset & {
   /** URL segment: /experiments/<slug>. Lowercase, hyphenated, unique. */
   slug: string;
   title: string;
@@ -10,10 +11,4 @@ export type Experiment = {
   preview: { src: string; width: number; height: number };
   /** Figma source, kept for traceability. */
   figmaUrl?: string;
-  /** setup/render/manifest come from src/lib/custom-effects/<file>. */
-  shader: Pick<Shader, "setup" | "render" | "manifest">;
-  /** Params exactly as get_design_context returned them. */
-  params: Record<string, unknown>;
-  /** Merged over params when prefers-reduced-motion is set. Stop motion and pointer effects here. */
-  reducedMotionParams?: Record<string, unknown>;
 };

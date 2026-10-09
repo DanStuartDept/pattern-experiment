@@ -16,6 +16,9 @@ export default function Home() {
       <p className={styles.processLink}>
         <Link href="/process">How these experiments are made</Link>
       </p>
+      <p className={styles.processLink}>
+        <Link href="/examples">Using the shaders in a site</Link>
+      </p>
       <ul className={styles.grid}>
         {experiments.map((experiment) => (
           <li key={experiment.slug} className={styles.card}>

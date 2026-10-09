@@ -10,19 +10,28 @@ export const metadata: Metadata = {
 
 const fileMap: { path: string; purpose: string }[] = [
   {
-    path: "src/lib/custom-effect-runtime/",
+    path: "src/shaders/runtime/",
     purpose:
       "Figma's WebGPU runtime, copied from MCP resources. Never edited.",
   },
   {
-    path: "src/lib/custom-effects/",
+    path: "src/shaders/effects/",
     purpose:
       "One shader source file per effect, copied from get_design_context. Never edited.",
   },
   {
-    path: "src/experiments/<slug>.ts",
+    path: "src/shaders/presets/<slug>.ts",
     purpose:
-      "The experiment: title, description, preview, and the params exactly as Figma returned them.",
+      "One shader variant: the shader, the params exactly as Figma returned them, the reduced-motion overrides and the default rotation.",
+  },
+  {
+    path: "src/shaders/<Name>.tsx",
+    purpose:
+      "The component other sites use, such as MorphingGradientGrow. A few lines over ShaderArt and its preset.",
+  },
+  {
+    path: "src/experiments/<slug>.ts",
+    purpose: "The listing entry: title, description and preview, plus the preset.",
   },
   {
     path: "src/experiments/registry.ts",
@@ -105,11 +114,12 @@ export default function ProcessPage() {
           </li>
           <li>
             Save the shader source from the response into{" "}
-            <code>src/lib/custom-effects/</code>, also unchanged.
+            <code>src/shaders/effects/</code>, also unchanged.
           </li>
           <li>
-            Write an experiment definition that imports the shader and holds
-            the params copied from the response. Add it to the registry.
+            Write a preset that imports the shader and holds the params copied
+            from the response, add a named component over it, then write the
+            experiment entry that imports the preset. Add it to the registry.
           </li>
           <li>
             Run the accessibility agent on the UI before it is written, then
@@ -208,11 +218,14 @@ export default function ProcessPage() {
           aria-label="Project file tree"
         >
           <code>{`src/
-  lib/
-    custom-effect-runtime/   copied from Figma, verbatim
-    custom-effects/          shader source, verbatim
+  shaders/                   the folder other sites copy
+    runtime/                 copied from Figma, verbatim
+    effects/                 shader source, verbatim
+    presets/                 shader + params per variant
+    ShaderArt.tsx            the reusable component
+    MorphingGradientGrow.tsx named components
   experiments/
-    magnetic-filings.ts      params and metadata
+    magnetic-filings.ts      listing entry
     registry.ts              list of experiments
 public/
   previews/                  listing thumbnails
@@ -222,8 +235,9 @@ public/
         </pre>
         <p>
           The Next.js app around it is deliberately thin: a listing page, one
-          static route per experiment, and a client viewer that handles
-          WebGPU detection and reduced motion. The full source is in the{" "}
+          static route per experiment, and a client viewer around the shared
+          ShaderArt component, which handles WebGPU detection and reduced
+          motion. The full source is in the{" "}
           <a href="https://github.com/DanStuartDept/pattern-experiment">
             pattern-experiment repository on GitHub
           </a>
