@@ -8,14 +8,11 @@ import {
   useReducedMotion,
   useTransform,
 } from "motion/react";
-import { Archivo, Fraunces } from "next/font/google";
+import { grotesk, serif } from "./fonts";
 import photo from "./assets/image-414.png";
 import maskShape from "./assets/mask-413.svg";
 import sliderArrow from "./assets/slider-arrow.svg";
 
-// Free stand-ins for Gelica and Test Founders Grotesk, which are licensed.
-const serif = Fraunces({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-serif" });
-const grotesk = Archivo({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-grotesk" });
 
 // The Figma frame is 1440x810. Everything inside is laid out at that size and scaled to cover.
 const STAGE_W = 1440;

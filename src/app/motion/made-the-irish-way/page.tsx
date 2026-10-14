@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import MadeTheIrishWay from "./MadeTheIrishWay";
+import TopPicks from "./TopPicks";
 
 export const metadata: Metadata = {
   title: "Made the Irish way",
@@ -11,6 +12,7 @@ export default function Page() {
   return (
     <main>
       <MadeTheIrishWay />
+      <TopPicks />
     </main>
   );
 }
