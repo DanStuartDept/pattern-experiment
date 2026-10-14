@@ -12,7 +12,6 @@ import { Archivo, Fraunces } from "next/font/google";
 import photo from "./assets/image-414.png";
 import maskShape from "./assets/mask-413.svg";
 import sliderArrow from "./assets/slider-arrow.svg";
-import styles from "./MadeTheIrishWay.module.css";
 
 // Free stand-ins for Gelica and Test Founders Grotesk, which are licensed.
 const serif = Fraunces({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-serif" });
@@ -39,7 +38,8 @@ const MASK_CY = 400;
 export default function MadeTheIrishWay() {
   const reduceMotion = useReducedMotion();
   const frame = useRef<HTMLDivElement>(null);
-  const [fit, setFit] = useState(1);
+  // null until measured: the server can't know the viewport, so the stage stays hidden to avoid a size jump.
+  const [fit, setFit] = useState<number | null>(null);
 
   useEffect(() => {
     const el = frame.current;
@@ -84,18 +84,27 @@ export default function MadeTheIrishWay() {
   const slideLeft = loop([0, 0, -SLIDE, -SLIDE], TIMES, [...EASE]);
   const slideRight = loop([0, 0, SLIDE, SLIDE], TIMES, [...EASE]);
 
+  const headline =
+    "absolute top-[calc(50%-65.5px)] m-0 w-[568px] whitespace-nowrap font-(family-name:--font-serif) text-[75px] leading-none text-[#006e42]";
+
   return (
-    <div ref={frame} className={`${styles.frame} ${serif.variable} ${grotesk.variable}`}>
-      <div className={styles.stage} style={{ transform: `translate(-50%, -50%) scale(${fit})` }}>
-        <motion.p className={`${styles.headline} ${styles.left}`} initial={{ x: 0 }} {...(slideLeft as object)}>
+    <div
+      ref={frame}
+      className={`${serif.variable} ${grotesk.variable} relative h-dvh w-screen overflow-hidden bg-[#fff9a7]`}
+    >
+      <div
+        className="absolute top-1/2 left-1/2 h-[810px] w-[1440px]"
+        style={{ transform: `translate(-50%, -50%) scale(${fit ?? 1})`, visibility: fit === null ? "hidden" : "visible" }}
+      >
+        <motion.p className={`${headline} right-[calc(50%+77.83px)] text-right`} initial={{ x: 0 }} {...(slideLeft as object)}>
           Made the
         </motion.p>
-        <motion.p className={`${styles.headline} ${styles.right}`} initial={{ x: 0 }} {...(slideRight as object)}>
+        <motion.p className={`${headline} left-[calc(50%+77.84px)] italic`} initial={{ x: 0 }} {...(slideRight as object)}>
           Irish way
         </motion.p>
 
         <motion.div
-          className={styles.photo}
+          className="absolute -top-[30px] -left-9 h-[840px] w-[1512px] mask-alpha mask-no-repeat"
           aria-hidden="true"
           style={{
             maskImage: `url("${maskShape.src}")`,
@@ -107,11 +116,11 @@ export default function MadeTheIrishWay() {
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={photo.src} alt="" className={styles.photoImg} />
+          <img src={photo.src} alt="" className="pointer-events-none absolute inset-0 size-full object-cover" />
         </motion.div>
 
         <motion.div
-          className={styles.cta}
+          className="absolute top-0 left-0 h-[810px] w-[1440px] bg-[rgba(45,43,35,0.4)]"
           initial={{ opacity: reduceMotion ? 1 : 0 }}
           animate={reduceMotion ? { opacity: 1 } : { opacity: [0, 0, 1, 1] }}
           transition={{
@@ -121,16 +130,19 @@ export default function MadeTheIrishWay() {
             repeat: Infinity,
           }}
         >
-          <div className={styles.ctaInner}>
+          <div className="absolute top-[calc(50%+16.78px)] left-1/2 flex w-[651px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-[33px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={sliderArrow.src} alt="" width={67} height={66} />
-            <h1 className={styles.ctaText}>
-              <span className={styles.eyebrow}>
-                The true taste of Kerrygold<span className={styles.reg}>®</span>
+            <h1 className="m-0 w-full text-center font-(family-name:--font-serif) font-normal text-white">
+              <span className="block font-(family-name:--font-grotesk) text-[25px] leading-none font-medium uppercase">
+                The true taste of Kerrygold<span className="align-top text-[16px]">®</span>
               </span>
-              <span className={styles.line}>Made by people who care, for people who care.</span>
+              <span className="block text-[50px] leading-none">Made by people who care, for people who care.</span>
             </h1>
-            <a className={styles.button} href="#explore">
+            <a
+              className="flex h-10 w-[195px] items-center justify-center rounded-[10px] border-[0.5px] border-black bg-[#fff9a7] font-(family-name:--font-grotesk) text-base leading-[1.1] font-semibold text-[#2d2b23] uppercase"
+              href="#explore"
+            >
               Explore more
             </a>
           </div>
